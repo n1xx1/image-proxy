@@ -1,10 +1,4 @@
 /**
- * Loads environment variables from an .env file located in the ROOT of your project
- * An example .env is included as .env.example, which you can rename and adjust to your likings
- */
-require("dotenv").config();
-
-/**
  * The webserver deaing with your requests to it
  */
 const express = require("express");
@@ -194,6 +188,6 @@ app.get("/:url", cors(), authorize, async (req, res) => {
 /**
  * Start the webserver and let him listen to the port set in the environment .env file
  */
-app.listen(process.env.PORT, () => {
+app.listen(+process.env.PORT, () => {
   console.log(`DDB Image proxy started on :${process.env.PORT}`);
 });
