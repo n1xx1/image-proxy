@@ -115,7 +115,7 @@ const authorize = async (req, res, next) => {
  */
 
 app.get("/:url", cors(), authorize, async (req, res) => {
-  const [encodedUrl, token] = req.params.url.split(encodedUrl, "__", 2);
+  const [encodedUrl, token] = req.params.url.split(req.params.url, "__", 2);
   if (token != "ewuWV6WRAkdX6Etk85DjUkRp") {
     res.status(401).send("Unauthorized image proxy access").end();
     return;
