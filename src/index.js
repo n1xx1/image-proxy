@@ -86,41 +86,7 @@ const checkResponse = (response) => {
  */
 const authorize = async (req, res, next) => {
   // by default, access is prohibited
-  let isAuthorized = false;
-
-  /**
-   * Example implementation 1: Access Token
-   * ========================================================
-   */
-  const { access_token } = req.query;
-  if (access_token && access_token === "ewuWV6WRAkdX6Etk85DjUkRp") {
-    isAuthorized = true;
-  } else {
-    isAuthorized = false;
-  }
-  /* ========================================================
-   * Let's assume your proxy is avaiable on localhost:4001, you will need to
-   * set the proxy vtta-core uses by setting the game setting accordingly.
-   *
-   * While connected to your Foundry server with a browser, open up the console (F12)
-   * and run the following command:
-   *
-   * game.settings.set('vtta-core', 'proxy', 'http://localhost:4001/%URL%?access_token=MY_SECRET_ACCESS_TOKEN');
-   *
-   * ========================================================
-   */
-
-  /**
-   * Example implementation 2: Super simple: Publicly open.
-   * !! Uncomment to use, not recommended !!
-   * ========================================================
-   */
-
-  // isAuthorized = true;
-
-  /**
-   * ========================================================
-   */
+  let isAuthorized = true;
 
   if (isAuthorized) {
     next();
@@ -149,7 +115,13 @@ const authorize = async (req, res, next) => {
  */
 
 app.get("/:url", cors(), authorize, async (req, res) => {
-  const url = decodeURIComponent(req.params.url);
+  const [encodedUrl, token] = req.params.url.split(encodedUrl, "__", 2);
+  if (token != "ewuWV6WRAkdX6Etk85DjUkRp") {
+    res.status(401).send("Unauthorized image proxy access").end();
+    return;
+  }
+
+  const url = decodeURIComponent(encodedUrl);
   console.log("[PROXY] " + url);
 
   try {
